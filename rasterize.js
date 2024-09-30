@@ -6,12 +6,13 @@ const WIN_LEFT = 0; const WIN_RIGHT = 1;  // default left and right x coords in 
 const WIN_BOTTOM = 0; const WIN_TOP = 1;  // default top and bottom y coords in world space
 const INPUT_TRIANGLES_URL = "https://ncsucgclass.github.io/prog2/triangles.json"; // triangles file loc
 const INPUT_SPHERES_URL = "https://ncsucgclass.github.io/prog2/spheres.json"; // spheres file loc
+const PART_THREE_URL = "https://jlcorrei.github.io/prog2/carrot.json";
 var Eye = new vec4.fromValues(0.5,0.5,-0.5,1.0); // default eye position in world space
 
 /* webgl globals */
 var gl = null; // the all powerful gl object. It's all here folks!
 var vertexBuffer; // this contains vertex coordinates in triples
-var triangleBuffer; // this contains indices into vertexBuffer in triples
+var triangleBuffer; // this contains indices into vertexBuffer in triples 
 var triBufferSize; // the number of indices in the triangle buffer
 var vertexPositionAttrib; // where to put position for vertex shader
 var colorBuffer;
@@ -70,8 +71,8 @@ function setupWebGL() {
 } // end setupWebGL
 
 // read triangles in, load them into webgl buffers
-function loadTriangles() {
-    var inputTriangles = getJSONFile(INPUT_TRIANGLES_URL,"triangles");
+function loadTriangles(url) {
+    var inputTriangles = getJSONFile(url,"triangles");
     if (inputTriangles != String.null) { 
         var whichSetVert; // index of vertex in current triangle set
         var whichSetTri; // index of triangle in current triangle set
@@ -204,8 +205,16 @@ function renderTriangles() {
 function main() {
   
   setupWebGL(); // set up the webGL environment
-  loadTriangles(); // load in the triangles from tri file
+  loadTriangles(INPUT_TRIANGLES_URL); // load in the triangles from tri file
   setupShaders(); // setup the webGL shaders
   renderTriangles(); // draw the triangles using webGL
+
+  window.addEventListener('keydown', async function(event) {
+    if (event.code === 'Space') {
+        // context.clearRect(0, 0, canvas.width, canvas.height);
+        loadTriangles(PART_THREE_URL);
+        renderTriangles(); 
+    }
+});
   
 } // end main
