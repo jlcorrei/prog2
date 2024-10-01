@@ -6,7 +6,7 @@ const WIN_LEFT = 0; const WIN_RIGHT = 1;  // default left and right x coords in 
 const WIN_BOTTOM = 0; const WIN_TOP = 1;  // default top and bottom y coords in world space
 const INPUT_TRIANGLES_URL = "https://ncsucgclass.github.io/prog2/triangles.json"; // triangles file loc
 const INPUT_SPHERES_URL = "https://ncsucgclass.github.io/prog2/spheres.json"; // spheres file loc
-const PART_THREE_URL = "https://jlcorrei.github.io/prog2/carrot.json";
+const CARROT_URL = "https://raw.githubusercontent.com/jlcorrei/prog2/refs/heads/gh-pages/carrot.json";
 var Eye = new vec4.fromValues(0.5,0.5,-0.5,1.0); // default eye position in world space
 
 /* webgl globals */
@@ -71,8 +71,8 @@ function setupWebGL() {
 } // end setupWebGL
 
 // read triangles in, load them into webgl buffers
-function loadTriangles(url) {
-    var inputTriangles = getJSONFile(url,"triangles");
+function loadTriangles(inputURL) {
+    var inputTriangles = getJSONFile(inputURL,"triangles");
     if (inputTriangles != String.null) { 
         var whichSetVert; // index of vertex in current triangle set
         var whichSetTri; // index of triangle in current triangle set
@@ -199,6 +199,14 @@ function renderTriangles() {
 
 } // end render triangles
 
+function renderCarrot(event) {
+    if (event.key === " ") {
+        console.log("Spacebar Pressed");
+        loadTriangles(CARROT_URL);
+        renderTriangles();
+    }
+}
+
 
 /* MAIN -- HERE is where execution begins after window load */
 
@@ -209,12 +217,6 @@ function main() {
   setupShaders(); // setup the webGL shaders
   renderTriangles(); // draw the triangles using webGL
 
-  window.addEventListener('keydown', async function(event) {
-    if (event.code === 'Space') {
-        // context.clearRect(0, 0, canvas.width, canvas.height);
-        loadTriangles(PART_THREE_URL);
-        renderTriangles(); 
-    }
-});
+  window.addEventListener('keydown', renderCarrot);
   
 } // end main
